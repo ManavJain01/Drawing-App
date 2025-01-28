@@ -17,8 +17,9 @@ import SignUp from "./pages/signup";
 import Login from "./pages/loginpage";
 import NotFoundPage from "./pages/notfoundpage";
 import LazyComponent from "./components/LazyComponent";
-import ProfilePage from "./pages/profilepage";
 import AllUsersPage from "./pages/alluserspage";
+const ProfilePage = React.lazy(() => import("./pages/profilepage"));
+const DrawingPage = React.lazy(() => import("./pages/drawingpage"));
 
 const App: React.FC = () => {
   // useSelector
@@ -75,6 +76,15 @@ const App: React.FC = () => {
               }
             />
           </Route>
+
+          <Route
+            path="/drawing"
+            element={
+              <LazyComponent>
+                <DrawingPage />
+              </LazyComponent>
+            }
+          />
         </Route>
 
         {/* 404 Not Found Route */}
