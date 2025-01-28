@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import React, { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
 import {
   Dialog,
   DialogActions,
@@ -11,7 +11,7 @@ import {
   Select,
   InputLabel,
   FormControl,
-} from '@mui/material';
+} from "@mui/material";
 
 interface UserDialogProps {
   open: boolean;
@@ -20,27 +20,38 @@ interface UserDialogProps {
   onSave: (data: Record<string, any>) => void;
 }
 
-const UserDialog: React.FC<UserDialogProps> = ({ open, onClose, user, onSave }) => {
+const UserDialog: React.FC<UserDialogProps> = ({
+  open,
+  onClose,
+  user,
+  onSave,
+}) => {
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      role: '',
+      name: "",
+      email: "",
+      password: "",
+      role: "",
     },
   });
 
   // Sync user data to the form when `user` changes
   useEffect(() => {
     if (user) {
-      reset({ ...user, password: '' }); // Reset form with user data, keeping additional fields
+      reset({ ...user, password: "" }); // Reset form with user data, keeping additional fields
     } else {
-      reset({ name: '', email: '', password: '', role: '' }); // Clear form
+      reset({ name: "", email: "", password: "", role: "" }); // Clear form
     }
   }, [user, reset]);
 
   // Form submission
-  const onSubmit = (data: Record<string, any>) => {
+  /**
+   * Form submission handler.
+   *
+   * @param {object} data - Form data.
+   * @returns {void}
+   */
+  const onSubmit = (data: Record<string, any>): void => {
     const formData = { ...user, ...data }; // Merge user with form data, preserving additional fields
     onSave(formData);
     onClose();
@@ -49,20 +60,32 @@ const UserDialog: React.FC<UserDialogProps> = ({ open, onClose, user, onSave }) 
   return (
     <Dialog open={open} onClose={onClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{user ? 'Edit User' : 'Create User'}</DialogTitle>
+        <DialogTitle>{user ? "Edit User" : "Create User"}</DialogTitle>
         <DialogContent>
           <Controller
             name="name"
             control={control}
             render={({ field }) => (
-              <TextField {...field} autoFocus margin="dense" label="Name" fullWidth />
+              <TextField
+                {...field}
+                autoFocus
+                margin="dense"
+                label="Name"
+                fullWidth
+              />
             )}
           />
           <Controller
             name="email"
             control={control}
             render={({ field }) => (
-              <TextField {...field} margin="dense" label="Email" type="email" fullWidth />
+              <TextField
+                {...field}
+                margin="dense"
+                label="Email"
+                type="email"
+                fullWidth
+              />
             )}
           />
           {!user && (
@@ -70,7 +93,13 @@ const UserDialog: React.FC<UserDialogProps> = ({ open, onClose, user, onSave }) 
               name="password"
               control={control}
               render={({ field }) => (
-                <TextField {...field} margin="dense" label="Password" type="password" fullWidth />
+                <TextField
+                  {...field}
+                  margin="dense"
+                  label="Password"
+                  type="password"
+                  fullWidth
+                />
               )}
             />
           )}

@@ -5,6 +5,10 @@ import { useTranslation } from "react-i18next";
 const Footer: React.FC = () => {
   const { t, i18n } = useTranslation();
 
+  /**
+   * Change the current language using i18next.
+   * @param {string} language The language to change to.
+   */
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language); // Change the current language
   };

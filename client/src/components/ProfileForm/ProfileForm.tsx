@@ -37,7 +37,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
     defaultValues: profile, // Initialize with profile data
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  /**
+   * Handles form submission to update user profile.
+   * @param {React.FormEvent} e - Form event.
+   * @returns {Promise<void>}
+   */
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
       await updateProfile({ id: authData.id, data: profile });
@@ -47,11 +52,18 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
     }
   };
 
+  /**
+   * Resets the form to the original profile data and disables editing mode.
+   * Useful when the user decides to cancel editing their profile.
+   */
   const handleCancel = () => {
     reset(profile); // Reset form to original profile data
     setIsEditing(false);
   };
 
+  /**
+   * Enables editing mode and pre-fills the form with the existing profile data.
+   */
   const handleEdit = () => {
     reset(profile); // Pre-fill form with existing profile data
     setIsEditing(true);
@@ -134,7 +146,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <Button type="submit" variant="contained" color="primary" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
                 Save Changes
               </Button>
               <Button

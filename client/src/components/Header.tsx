@@ -47,18 +47,33 @@ const Header: React.FC = () => {
   }, [authData]);
 
   // Functions
+  /**
+   * Handles the click event for the menu button.
+   * @param {React.MouseEvent<HTMLElement>} event The click event.
+   */
   const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+  /**
+   * Closes the menu by setting the anchor element to null.
+   */
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
 
+  /**
+   * Updates the authentication state of the user.
+   * @param {boolean} bool - A boolean indicating if the user is authenticated.
+   */
   const handleAuthentication = (bool: boolean) => {
     setIsAuthenticated(bool);
   };
 
+  /**
+   * Handles the logout button click event. Dispatches the resetTokens and
+   * logoutUser actions, and sets the isAuthenticated state to false.
+   */
   const handleLogout = () => {
     dispatch(resetTokens());
     dispatch(logoutUser());

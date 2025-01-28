@@ -23,9 +23,14 @@ const ResetPassword = () => {
   }, [token]);
 
   // Handle form submission
+  /**
+   * Handles the form submission event.
+   * @param {React.FormEvent} event The form submission event.
+   */
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    // Validate the input fields
     if (!newPassword || !confirmPassword) {
       setError("Both fields are required");
       return;
@@ -36,25 +41,31 @@ const ResetPassword = () => {
       return;
     }
 
+    // Validate the token
     if (!token) {
       setError("Token is missing");
       return;
     }
 
     try {
+      // Clear any previous errors
       setError(null);
 
+      // Call the reset password API
       const response = await resetPassword({
         token: token,
         password: newPassword,
       });
 
+      // Handle the response
       if (response.data.success) {
-        navigate("/login"); // Redirect to login page on success
+        // Redirect to the login page on success
+        navigate("/login");
       } else {
         setError("Password reset failed");
       }
     } catch (error) {
+      // Catch any errors that occur
       setError("An error occurred while resetting the password");
     }
   };

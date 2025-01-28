@@ -17,6 +17,10 @@ const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
   const [forgetPasswordRequest, { isLoading }] = useForgotPasswordMutation();
 
+  /**
+   * Handle form submission to forgot password API.
+   * @param {React.FormEvent} e - Form event.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

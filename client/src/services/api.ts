@@ -19,30 +19,6 @@ export interface UserResponse {
   }
 }
 
-export interface ProductResponse {
-  data: {
-    data: {
-      _id: string;
-      name: string;
-      price: number;
-      quantity: number;
-      lowStockThreshold: number;
-      warehouse_id: string;
-    };
-  }
-}
-
-export interface WarehouseResponse {
-  data: {
-    data: {
-      _id: string;
-      name: string;
-      location: string;
-      managerId: string;
-    };
-  }
-}
-
 interface RefreshTokenResponse {
   data: {
     data: {
