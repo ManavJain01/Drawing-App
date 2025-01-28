@@ -24,7 +24,7 @@ The Drawing App is a user-friendly platform where users can create digital art e
 
 ## Tech Stack
 
-- **Frontend**: HTML, CSS, JavaScript (or React, if applicable)
+- **Frontend**: React, Typescript, Material UI
 - **Canvas API** for drawing and rendering.
 
 ## Installation
@@ -52,7 +52,3 @@ The Drawing App is a user-friendly platform where users can create digital art e
 ## License
 
 This project is licensed under the MIT License.
-
-## Acknowledgments
-
-Special thanks to Harshit Kirola and Manav Jain for their contributions and efforts in creating this app.

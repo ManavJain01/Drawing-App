@@ -21,7 +21,20 @@ import {
   Menu,
 } from "@mui/icons-material";
 
-const Sidebar: React.FC = ({
+interface SidebarProps {
+  brushSize: number;
+  tool: string;
+  setBrushSize: React.Dispatch<React.SetStateAction<number>>;
+  setTool: React.Dispatch<React.SetStateAction<string>>;
+  setColor: React.Dispatch<React.SetStateAction<string>>;
+  handleUndo: () => void;
+  handleRedo: () => void;
+  handleClear: () => void;
+  saveDrawing: () => void;
+  addTextAtDefaultLocation: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({
   brushSize,
   tool,
   setBrushSize,
@@ -31,6 +44,7 @@ const Sidebar: React.FC = ({
   handleRedo,
   handleClear,
   saveDrawing,
+  addTextAtDefaultLocation,
 }) => {
   const [open, setOpen] = useState(true); // State to control the sidebar visibility
 
@@ -40,6 +54,12 @@ const Sidebar: React.FC = ({
    */
   const toggleSidebar = () => {
     setOpen(!open); // Toggle the sidebar visibility
+  };
+
+  const [inputText, setInputText] = useState("");
+
+  const handleInputChange = (event) => {
+    setInputText(event.target.value);
   };
 
   if (!open)
@@ -76,7 +96,7 @@ const Sidebar: React.FC = ({
           <Toolbar
             sx={{ backgroundColor: "#f1f1f1", justifyContent: "space-between" }}
           >
-            <Typography variant="h6">Drawing Page</Typography>
+            <Typography variant="h6">Toolbar</Typography>
             <IconButton onClick={toggleSidebar}>
               <Clear />
             </IconButton>
@@ -145,6 +165,24 @@ const Sidebar: React.FC = ({
             >
               <Circle />
             </IconButton>
+
+            <Box>
+              <TextField
+                label="Enter text"
+                variant="outlined"
+                value={inputText}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                variant="contained"
+                onClick={() => addTextAtDefaultLocation(inputText)}
+                fullWidth
+              >
+                Add Text at Default Position
+              </Button>
+            </Box>
           </Box>
 
           <Button

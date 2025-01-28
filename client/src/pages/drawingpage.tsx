@@ -7,6 +7,9 @@ import {
 } from "../services/drawing.api";
 
 const Sidebar = React.lazy(() => import("../components/Drawing Page/Sidebar"));
+const TextComponent = React.lazy(
+  () => import("../components/Drawing Page/TextComponent")
+);
 import LazyComponent from "../components/LazyComponent";
 import { toast } from "react-toastify";
 import { useAppSelector } from "../store/store";
@@ -30,6 +33,9 @@ const DrawingPage: React.FC = () => {
   const [startPoint, setStartPoint] = useState<{ x: number; y: number } | null>(
     null
   );
+  const [textItems, setTextItems] = useState<
+    { x: number; y: number; text: string }[]
+  >([]); // State to track text
 
   //   useEffect
   useEffect(() => {
@@ -46,7 +52,7 @@ const DrawingPage: React.FC = () => {
     if (canvasRef.current) {
       const canvasData = canvasRef.current.getSaveData(); // Get the image as a base64 string
       try {
-        await saveDraw({ drawing: canvasData });
+        await saveDraw({ drawing: canvasData, textItems: textItems });
 
         toast.success("Drawing Saved Successfully");
       } catch (error) {
@@ -65,18 +71,30 @@ const DrawingPage: React.FC = () => {
   const getSavedDrawing = async () => {
     try {
       const res = await getDrawById(authData.id);
-      console.log("res: ", res);
 
-      if (canvasRef.current && res.data.data.drawing) {
+      if (
+        canvasRef.current &&
+        res.data.data.drawing &&
+        res.data.data.textItems
+      ) {
         const drawing = res.data.data.drawing;
+        const texts = res.data.data.textItems;
         // Load the saved drawing data into the canvas
         canvasRef.current.loadSaveData(drawing, true);
+        setTextItems(texts);
       }
-
-      toast.success("Drawing Fetch Successfully");
     } catch (error) {
       toast.error("Drawing Fetch Failed");
     }
+  };
+
+  const addTextAtDefaultLocation = (inputText: string): void => {
+    const defaultX = 500; // Default x position
+    const defaultY = 100; // Default y position
+    const newText = inputText; // Default text content
+
+    const newTextItem = { x: defaultX, y: defaultY, text: newText };
+    setTextItems((prevItems) => [...prevItems, newTextItem]);
   };
 
   /**
@@ -158,6 +176,32 @@ const DrawingPage: React.FC = () => {
     canvasRef.current?.clear();
   };
 
+  // Add text to canvas
+  const addText = (e: React.MouseEvent) => {
+    if (tool === "text") {
+      const newText = prompt("Enter text: ");
+      if (newText) {
+        setTextItems([
+          ...textItems,
+          { x: e.clientX, y: e.clientY - 60, text: newText },
+        ]);
+      }
+    }
+  };
+
+  // Handle text movement
+  const handleTextMove = (index: number, newX: number, newY: number) => {
+    const updatedTextItems = [...textItems];
+    updatedTextItems[index] = { ...updatedTextItems[index], x: newX, y: newY };
+    setTextItems(updatedTextItems);
+  };
+
+  // Handle text deletion
+  const handleTextDelete = (index: number) => {
+    const updatedTextItems = textItems.filter((_, i) => i !== index);
+    setTextItems(updatedTextItems);
+  };
+
   return (
     <Box
       sx={{
@@ -181,6 +225,7 @@ const DrawingPage: React.FC = () => {
           handleRedo={handleRedo}
           handleClear={handleClear}
           saveDrawing={saveDrawing}
+          addTextAtDefaultLocation={addTextAtDefaultLocation}
         />
       </LazyComponent>
 
@@ -194,6 +239,19 @@ const DrawingPage: React.FC = () => {
           canvasHeight={window.innerHeight - 60} // Adjust for toolbar height
           lazyRadius={0}
         />
+
+        {/* Render text items */}
+        {textItems.map((textItem, index) => (
+          <LazyComponent key={index}>
+            <TextComponent
+              x={textItem.x}
+              y={textItem.y}
+              text={textItem.text}
+              onMove={(newX, newY) => handleTextMove(index, newX, newY)}
+              onDelete={() => handleTextDelete(index)}
+            />
+          </LazyComponent>
+        ))}
       </Box>
     </Box>
   );

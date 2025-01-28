@@ -27,7 +27,7 @@ interface ProfileFormProps {
 const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
   const authData = useAppSelector((store) => store.auth);
   const [updateProfile] = useUpdateUserMutation();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
 
   const {
     register,
@@ -45,8 +45,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     try {
-      await updateProfile({ id: authData.id, data: profile });
+      await updateProfile({ id: authData.id, ...profile });
       setIsEditing(false);
+      reset(profile); // Sync the form state with the updated profile
     } catch (error) {
       console.error("Error submitting profile:", error);
     }
@@ -65,7 +66,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
    * Enables editing mode and pre-fills the form with the existing profile data.
    */
   const handleEdit = () => {
-    reset(profile); // Pre-fill form with existing profile data
+    // reset(profile); // Pre-fill form with existing profile data
     setIsEditing(true);
   };
 
@@ -155,6 +156,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
                 Save Changes
               </Button>
               <Button
+                type="button"
                 variant="outlined"
                 color="secondary"
                 onClick={handleCancel}
@@ -171,6 +173,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ profile, setProfile }) => {
               transition={{ duration: 0.3 }}
             >
               <Button
+                type="button"
                 variant="contained"
                 color="secondary"
                 onClick={handleEdit}

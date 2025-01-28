@@ -12,14 +12,14 @@ import createHttpError from "http-errors";
  * @returns {Promise<void>} - A promise that resolves when the drawing is created and response is sent.
  */
 export const saveDraw = asyncHandler(async (req: Request, res: Response) => {
-    const { drawing } = req.body;    
+    const { drawing, textItems } = req.body;    
 
     if(!req.user){
         throw createHttpError(403, {
             message: "Invalid or unauthorized user role",
         });
     }
-    const result = await drawService.saveDraw(req.user._id as string, drawing);
+    const result = await drawService.saveDraw(req.user._id as string, drawing, textItems);
     res.send(createResponse(result, "Draw created sucssefully"))
 });
 

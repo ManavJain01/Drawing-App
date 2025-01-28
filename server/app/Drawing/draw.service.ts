@@ -9,11 +9,14 @@ import Drawing from "./draw.schema";
  * @param {string} drawing - The drawing data as a base64 string.
  * @returns {Promise<string>} A promise that resolves with a success message when the drawing is saved.
  */
-export const saveDraw = async (userId: string, drawing: string) => {    
-    const newDrawing = new Drawing({ userId: userId, drawing });
-    await newDrawing.save();
+export const saveDraw = async (userId: string, drawing: string, textItems: [object]) => {    
+    const updatedDrawing = await Drawing.findOneAndUpdate(
+        { userId: userId }, // Search for the drawing by userId
+        { drawing: drawing, textItems: textItems }, // Update the drawing field
+        { new: true, upsert: true } // If not found, create a new document
+    );
 
-    return 'Drawing saved successfully';
+    return updatedDrawing ? 'Drawing updated successfully' : 'Drawing saved successfully';
 };
 
 export const updateDraw = async (id: string, data: IUser) => {
