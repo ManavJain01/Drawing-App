@@ -150,7 +150,7 @@ const Sidebar: React.FC = ({
           <Button
             sx={{
               marginTop: "auto",
-              background: "linear-gradient(45deg, #FF6B6B, #F7B7A3)",
+              background: "linear-gradient(45deg, green, lightgreen)",
               borderRadius: "30px",
               color: "white",
               fontWeight: "bold",
@@ -160,7 +160,6 @@ const Sidebar: React.FC = ({
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
               transition: "all 0.3s ease",
               "&:hover": {
-                background: "linear-gradient(45deg, #FF6B6B, #F7B7A3)",
                 boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
                 transform: "translateY(-3px)",
               },

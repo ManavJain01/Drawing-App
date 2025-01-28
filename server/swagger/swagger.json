@@ -208,11 +208,91 @@
         }
       }
     },
-    "/inventory/": {
+    "/draw/": {
+      "get": {
+        "description": "Retrieve a list of users. Requires a bearer token for authentication.",
+        "tags": ["drawing"],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Bearer <token>"
+            },
+            "description": "Bearer token for authentication"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "email": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new user.",
+        "tags": ["drawing"],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Draw"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Drawing saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": { "type": "string" },
+                    "drawing": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/draw/{id}": {
       "get": {
         "description": "",
-        "tags": ["inventory"],
+        "tags": ["drawing"],
         "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
           {
             "in": "header",
             "name": "Authorization",
@@ -230,106 +310,9 @@
           }
         }
       },
-      "post": {
+      "delete": {
         "description": "",
-        "tags": ["inventory"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "inventory",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Inventory"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/inventory/report-csv": {
-      "get": {
-        "description": "",
-        "tags": ["inventory"],
-        "parameters": [
-          {
-            "name": "startDate",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/inventory/report-pdf": {
-      "get": {
-        "description": "",
-        "tags": ["inventory"],
-        "parameters": [
-          {
-            "name": "startDate",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "endDate",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/inventory/{id}": {
-      "get": {
-        "description": "",
-        "tags": ["inventory"],
+        "tags": ["drawing"],
         "parameters": [
           {
             "name": "id",
@@ -356,21 +339,13 @@
       },
       "patch": {
         "description": "",
-        "tags": ["inventory"],
+        "tags": ["drawing"],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "inventory",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Inventory"
-            }
           },
           {
             "in": "header",
@@ -391,249 +366,7 @@
       },
       "put": {
         "description": "",
-        "tags": ["inventory"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "inventory",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Inventory"
-            }
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "tags": ["inventory"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/inventory/allwarehouses/{id}": {
-      "get": {
-        "description": "",
-        "tags": ["inventory"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/warehouse/": {
-      "get": {
-        "description": "",
-        "tags": ["warehouse"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "tags": ["warehouse"],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          },
-          {
-            "name": "warehouse",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Warehouse"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/warehouse/{id}": {
-      "get": {
-        "description": "",
-        "tags": ["warehouse"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "patch": {
-        "description": "",
-        "tags": ["warehouse"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "warehouse",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Warehouse"
-            }
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "tags": ["warehouse"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "warehouse",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/Warehouse"
-            }
-          },
-          {
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "example": "Bearer <token>"
-            },
-            "description": "Bearer token for authentication"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "tags": ["warehouse"],
+        "tags": ["drawing"],
         "parameters": [
           {
             "name": "id",
@@ -820,49 +553,19 @@
       },
       "required": ["name", "email", "password"]
     },
-    "Warehouse": {
+    "Draw": {
       "type": "object",
       "properties": {
-        "name": {
+        "userId": {
           "type": "string",
-          "example": "Warehouse A"
+          "example": "34795673476"
         },
-        "location": {
+        "drawing": {
           "type": "string",
-          "example": "Mohali"
-        },
-        "managerId": {
-          "type": "string",
-          "example": "3423594u35t34u"
+          "example": "dssdgdlsfbgiudfhlghj"
         }
       },
-      "required": ["name", "location", "managerId"]
-    },
-    "Inventory": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "example": "Product A"
-        },
-        "price": {
-          "type": "number",
-          "example": 50
-        },
-        "quantity": {
-          "type": "number",
-          "example": 70
-        },
-        "lowStockThreshold": {
-          "type": "number",
-          "example": 10
-        },
-        "warehouse_id": {
-          "type": "string",
-          "example": "124u9354u035"
-        }
-      },
-      "required": ["name", "price", "warehouseId", "lowStockThreshold", "quantity"]
+      "required": ["name", "drawing"]
     },
     "Login": {
       "type": "object",
